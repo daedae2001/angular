@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>KML Layers</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/psajs" orig_index=2>(
+      function(){var espana=new google.maps.LatLng(39.044786,-1.010742);var opciones={zoom:5,center:espana,mapTypeId:google.maps.MapTypeId.ROADMAP};var div=document.getElementById('mapa');var map=new google.maps.Map(div,opciones);var marcadores=[],visibles=['Aeropuerto','Estacion de autobus'];var insertar_marcador=function(data){$.each(data,function(i,obj){var marcador=new google.maps.Marker({title:obj.name,position:new google.maps.LatLng(obj.coords.lat,obj.coords.lng),map:map,tipo:obj.type,icon:obj.type==='Aeropuerto'?'airport.png':'busstop.png'});marcadores.push(marcador);});};var ocultar_marcadores=function(){for(var i=0,length=marcadores.length;i<length;i++){marcadores[i].setVisible(visibles.indexOf(marcadores[i].tipo)!==-1);}};$.getJSON('aeropuertos.json',insertar_marcador);$.getJSON('estaciones.json',insertar_marcador);$('input.control').on('change',function(e){var $this=$(this),valor=$this.val();if($this.is(':checked')){visibles.push(valor);}else{visibles.splice(visibles.indexOf(valor),1);}ocultar_marcadores();});})();</script>
+<script data-pagespeed-no-defer>(function(){function f(b){var a=window;if(a.addEventListener)a.addEventListener("load",b,!1);else if(a.attachEvent)a.attachEvent("onload",b);else{var c=a.onload;a.onload=function(){b.call(this);c&&c.call(this)}}};window.pagespeed=window.pagespeed||{};var k=window.pagespeed;function l(b,a,c,g,h){this.h=b;this.i=a;this.l=c;this.j=g;this.b=h;this.c=[];this.a=0}l.prototype.f=function(b){for(var a=0;250>a&&this.a<this.b.length;++a,++this.a)try{null!=document.querySelector(this.b[this.a])&&this.c.push(this.b[this.a])}catch(c){}this.a<this.b.length?window.setTimeout(this.f.bind(this),0,b):b()};
+k.g=function(b,a,c,g,h){if(document.querySelector&&Function.prototype.bind){var d=new l(b,a,c,g,h);f(function(){window.setTimeout(function(){d.f(function(){for(var a="oh="+d.l+"&n="+d.j,a=a+"&cs=",b=0;b<d.c.length;++b){var c=0<b?",":"",c=c+encodeURIComponent(d.c[b]);if(131072<a.length+c.length)break;a+=c}k.criticalCssBeaconData=a;var b=d.h,c=d.i,e;if(window.XMLHttpRequest)e=new XMLHttpRequest;else if(window.ActiveXObject)try{e=new ActiveXObject("Msxml2.XMLHTTP")}catch(g){try{e=new ActiveXObject("Microsoft.XMLHTTP")}catch(h){}}e&&
+(e.open("POST",b+(-1==b.indexOf("?")?"?":"&")+"url="+encodeURIComponent(c)),e.setRequestHeader("Content-Type","application/x-www-form-urlencoded"),e.send(a))})},0)})}};k.criticalCssBeaconInit=k.g;})();
+pagespeed.selectors=["#wrapper","a","body","header","header > a"];pagespeed.criticalCssBeaconInit('/ngx_pagespeed_beacon','https://www.funcion13.com/old/ejemplos/google-maps/oculta-marcadores/','WUPEeo9_ja','_fpeHhVSZnk',pagespeed.selectors);</script><noscript class=psa_add_styles><link rel=stylesheet href="/old/ejemplos/A.estiloGeneral.css.pagespeed.cf.9cGTCkD6gD.css" type="text/css" media=all /><link rel=stylesheet href=estilo.css type="text/css" media=all /></noscript><script data-pagespeed-no-defer>(function(){function b(){var a=window,c=e;if(a.addEventListener)a.addEventListener("load",c,!1);else if(a.attachEvent)a.attachEvent("onload",c);else{var d=a.onload;a.onload=function(){c.call(this);d&&d.call(this)}}};var f=!1;function e(){if(!f){f=!0;for(var a=document.getElementsByClassName("psa_add_styles"),c=0,d;d=a[c];++c)if("NOSCRIPT"==d.nodeName){var k=document.createElement("div");k.innerHTML=d.textContent;document.body.appendChild(k)}}}function g(){var a=window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||null;a?a(function(){window.setTimeout(e,0)}):b()}
+var h=["pagespeed","CriticalCssLoader","Run"],l=this;h[0]in l||!l.execScript||l.execScript("var "+h[0]);for(var m;h.length&&(m=h.shift());)h.length||void 0===g?l[m]?l=l[m]:l=l[m]={}:l[m]=g;})();
+pagespeed.CriticalCssLoader.Run();</script><script type="text/javascript" src="/pagespeed_static/js_defer.tRzI7EHUpg.js"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAokBagH1RuklshFgw5THHzLHXFTt6Pk2Q&callback=initMap">
+    </script>
+  </body>
+</html>

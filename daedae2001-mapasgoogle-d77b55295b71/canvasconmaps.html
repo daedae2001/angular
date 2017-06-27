@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <link rel="stylesheet" media="screen,projection" type="text/css" href="./css/principal.css" />
+  <script type="text/javascript" src="./js/datos.js"></script> 
+  <script type="text/javascript" src="./js/funciones.js"></script>
+   <script  type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Control options</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #map {
+      height: 100%;
+    }
+  </style>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAokBagH1RuklshFgw5THHzLHXFTt6Pk2Q&callback=initMap">
+   
+  </script>
+</head>
+
+<body>
+
+ <div id="menu">
+    <input type="text" id="hi" name="usuario" value=0>
+</div>
+  <div id="map"></div>
+  <script>
+    var map;
+    var overlay;
+    var context;
+    function initMap() {
+  var myLatLng = {lat: -25.363, lng: 131.044};
+
+   map= new google.maps.Map(document.getElementById('map'), {
+    zoom: 4,
+    center: myLatLng
+  });
+  overlay= new google.maps.OverlayView();
+  overlay.draw = function(){};
+overlay.setMap(map);
+
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: 'Hello World!'
+  });
+}
+    function addcanvaas(){
+   var canvas=new document.createElement("canvas");
+canvas.style.position='absolute';
+canvas.width='800';
+canvas.heigth='640';
+overlay.getPanes().overlayLayer.appendChild(canvas);
+context=canvas.getContext('2d');
+timer();
+   }
+   function timer(){
+     addCrect();
+     setTimeout(timer,1000);
+   }
+   function addCrect (){
+     var x =800*Math.random();
+     var y =640*Math.random();
+     var r =50;
+     context.fillStyle="rgba(130,200,60,.7)"
+     context.beginPath();
+     context.arc(x,y,r,Math.PI*2,true);
+     context.closePath();
+     context.fill();
+     }
+   
+    </script>
+
+ 
+
+</body>
+
+</html>

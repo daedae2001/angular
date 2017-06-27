@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+	 <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9b7jNYeQnX8kP8FmvGKjpFgKnXyemufA&signed_in=true&libraries=visualization&callback=initMap">
+    </script>
+    <script>
+
+	
+
+function initMap() {
+
+ var query = window.location.search.substring(1);
+	   //  alert(query);
+       var vars = query.split("&");
+	   var pair0 = vars[0].split("=");
+	   var pair1 = vars[1].split("=");
+	   var pair2 = vars[2].split("=");
+	   // alert(vars.length);
+       // alert(pair0.length);
+       var  mylat =pair0[1];
+	//		   alert(mylat);
+	//		    alert(vars[1]);
+	// alert('pair1 '+pair1.length);
+//	alert('pair1 '+pair1[0]+' pair1 '+pair1[1]);
+	 
+         var mylng  =pair1[1];
+	//alert('mylng '+pair1[1]);
+		 
+ 
+    var   mydir  =pair2[1];    //("=") if(pair[0] == variable){return pair[1];}
+     //      alert(mydir);
+var pyrmont={mylat,mylng};
+  var lat = mylat;
+var long = mylng;
+
+ latlngset = new google.maps.LatLng(lat, long);    
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 18,
+       center:latlngset
+  });
+
+
+  var marker = new google.maps.Marker({  
+          map: map, title: 'titulo' , position: latlngset  
+        });
+      // map.setCenter(marker.getPosition())
+
+
+ // var marker = new google.maps.Marker({
+  //  position:  {  mylat,   mylng},
+   // /map: map,
+    //title: 'Hello World!'
+  //});
+}
+
+    </script>
+    
+  </body>
+</html>

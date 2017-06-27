@@ -1,0 +1,69 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Mano Alsada</title>
+<script type="text/javascript"  >
+ var posx = 0;
+	 var posy = 0;
+   var tim=0;
+  var canvas;
+   var ctx;
+ 
+   function dibuja(){
+if(tim==0){
+Iniciar_Timer()
+}
+else{
+Detener_Timer()
+}
+
+   }
+   
+    function Iniciar_Timer() {
+     tim=1;
+        Contador = 0;
+        Handle_Mi_Timer = window.setInterval('Mi_Timer()', 5);  // en milisegundos, 1000=1 segundo
+    }
+
+    function Detener_Timer() {
+      tim=0;
+        if(Handle_Mi_Timer!=null) {
+            window.clearInterval(Handle_Mi_Timer);
+            Handle_Mi_Timer = null;
+                 }
+    }
+
+    function Mi_Timer() {
+        Contador++;
+        canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#000";
+        ctx.fillRect (posx, posy, 10, 10);
+    
+    }
+     
+     
+
+  function showCoords(event) {
+    posx = event.clientX;
+    posy = event.clientY;
+    var coords = "X coords: " + posx + ", Y coords: " + posy;
+    document.getElementById("Status_Timer").innerHTML = coords;
+}
+</script>
+</head>
+
+<body onmousemove="showCoords(event)" onclick="dibuja()" style="margin:0;padding:0;">
+<div id="Status_Timer">Timer detenido</div>
+<canvas id="canvas" width="640" height="480"></canvas> 
+<canvas id="canvas" width="900" height="600" style="border:#100 solid 1px;">
+<p>Su navegador no soporta HTML5</p>
+</canvas>
+
+
+<body>
+
+</html>
+

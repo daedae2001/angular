@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>mapa con Street View</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+      #floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #11f;
+  padding: 5px;
+  border: 1px solid #fff;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+    </style>
+      <script type="text/javascript" src="./js/datos.js"></script> 
+  <script type="text/javascript" src="./js/funciones.js"></script>
+  </head>
+  <body> <div id="floating-panel">
+      <input id="address" type="textbox" value="soldado ruiz 2657  cordoba  argentina"/>
+      <input id="submit" type="button" value="Geocode" onclick="return submit_onclick()" />
+      <input id="direccion" value=" " type ="text" />
+      <input id="busca" type="button" value ="Search" onclick="return busca_onclick()" />     </div>
+ <div id="map" style="width: 45%; height: 100%;float:left"></div>
+  <div id="pano" style="width: 45%; height: 100%;float:rigth"></div>
+  
+   
+    <script>
+        var direciones = [
+   ['Perez Arseno 5372 Cordoba Capital  argentina '],
+ ['Juan D. Peron 225 Embalse  argentina '],
+ ['Recta Martinoli 7415 Cordoba Capital  argentina '],
+ ['9 de Julio  Villa Cura Brochero  argentina '],
+ ['Libertad 273 Santa Rosa de Calamuchita  argentina '],
+ ['San Martin 98 Tanti  argentina '],
+ ['Av. San Martin 401 Cosquin  argentina '],
+ ['Catamarca 308 Tancacha  argentina '],
+ ['Av. Colon 1395 Cordoba Capital  argentina '],
+ ['Av. San Martin 802 Rio Tercero  argentina '],
+ ['Av. Velez Sarsfield 437 La Calera  argentina '],
+ ['Av. Concepcion Arenales 1120 Cordoba Capital  argentina '],
+ ['Oncativo 1501 Cordoba Capital  argentina '],
+ ['San Jeronimo 2607 Cordoba Capital  argentina '],
+ ['25 de Mayo 921 Oncativo  argentina '],
+ ['Av. Colon 4800  Cordoba Capital  argentina '],
+ ['Cordoba 585 Santa Rosa de Calamuchita  argentina '],
+ ['Av. Armada Argentina 334  Cordoba Capital  argentina '],
+ ['Av. San Martin 6036 Rio Ceballos  argentina '],
+ ['Eva Peron 121 La Calera  argentina '],
+ ['Parana 497 Cordoba Capital  argentina '],
+ ['Jacinto de Altolaguirre 2244 Cordoba Capital  argentina '],
+ ['Baravino 4926 Cordoba Capital  argentina '],
+ ['Jujuy 520 Cordoba Capital  argentina '],
+ ['Av. Ricchieri 2657 Cordoba Capital  argentina '],
+ ['24 de Septiembre 179 Alta Gracia  argentina '],
+ ['Octavio Pinto 3126 Cordoba Capital  argentina '],
+ ['9 de Julio 603 Pilar  argentina '],
+ ['Mauricio Yadarola 1231 Cordoba Capital  argentina '],
+ ['Roque Saenz Pena 130 Bialet Masse  argentina '],
+ ['Italia 702 Jesus Maria  argentina '],
+ ['Tte. Gral. Juan D. Peron 1188 Villa Carlos Paz  argentina '],
+ ['Jeronimo Luis de Cabrera 333 Cordoba Capital  argentina '],
+ ['Roma 557 Cordoba Capital  argentina '],
+ ['Sarmiento 270 Nono  argentina '],
+ ['Almirante Brown 496 Cruz del Eje  argentina '],
+ ['Av. Rafael Nunez 4418 Cordoba Capital  argentina '],
+ ['9 de Julio 336 Cordoba Capital  argentina '],
+ ['Independencia 222 Santa Rosa de Calamuchita  argentina '],
+ ['Belgrano 300 Salsipuedes  argentina '],
+ ['Nazaret 3182 Cordoba Capital  argentina '],
+ ['Pte. Peron 895 Villa del Totoral  argentina '],
+ ['Av. San Martin 1568 Mina Clavero  argentina '],
+ ['Naciones Unidas 984 Cordoba Capital  argentina '],
+ ['Rio de Janeiro 1043 Villa Allende  argentina '],
+ ['Bartolome Jaimes 1457 Capilla del Monte  argentina '],
+ ['Nicanor Carranza 3713 Cordoba Capital  argentina '],
+ ['Ejercito Argentino 6820 Cordoba Capital  argentina '],
+ ['San Martin 198 Alta Gracia  argentina '],
+ ['Castro Barros 413 Cordoba Capital  argentina '],
+ ['Manuel Pizarro 212 Monte Cristo  argentina '],
+ ['Bv. Guzman 81 Cordoba Capital  argentina '],
+ ['Av. General Savio Esq. San Miguel Rio Tercero  argentina '],
+ ['Av. San Martin 2786 Colonia Caroya  argentina '],
+ ['Av. Recta Martinoli 7850 Cordoba Capital  argentina '],
+ ['Av. Goycoechea 1209 Villa Allende  argentina '],
+ ['Rivadavia 88 Villa Ascasubi  argentina '],
+ ['Av. La Cordillera 4705 Cordoba Capital  argentina '],
+ ['Gral. San Martin 1098 Villa del Rosario  argentina '],
+ ['Av. Libertad 21 Villa Carlos Paz  argentina '],
+ ['Av. Caraffa 2201 Cordoba Capital  argentina '],
+ ['9 de Julio 760 Luque  argentina '],
+ ['Av. Menendez Pidal 3416 Cordoba Capital  argentina '],
+ ['Av. Menendez Pidal 3981 Cordoba Capital  argentina '],
+ ['Pte. Peron 937 Cosquin  argentina '],
+ ['Dr. Ramon J. Carcano 1267 Villa Carlos Paz  argentina '],
+ ['Dr. Ramon J. Carcano 898 Villa Carlos Paz  argentina '],
+ ['27 de Abril 217 Cordoba Capital  argentina '],
+ ['Mariano Fragueiro 2000 Cordoba Capital  argentina '],
+ ['Bv. Illia 5 Cordoba Capital  argentina '],
+ ['Tucuman 496 Cordoba Capital  argentina '],
+ ['Av. Rafael Nunez 3686 Cordoba Capital  argentina '],
+ ['Av. Colon 745 Cordoba Capital  argentina '],
+ ['Av. Libertad 2077 Cordoba Capital  argentina '],
+ ['Duarte Quiros 1400 Cordoba Capital  argentina '],
+ ['Pedro Laplace 5890 Cordoba Capital  argentina '],
+ ['Av. 24 de Septiembre 802 Cordoba Capital  argentina '],
+ ['Av. Santa Ana 2515 Cordoba Capital  argentina '],
+ ['Tte. Gral. Lonardi  San Agustin  argentina '],
+ ['Peru 305 Rio Segundo  argentina '],
+ ['Champaqui 272 Villa General Belgrano  argentina '],
+ ['Bajada Pucara 1749 Cordoba Capital  argentina '],
+ ['Av. Juan Domingo Peron 254 La Calera  argentina '],
+ ['Sol de Mayo 1204 Cordoba Capital  argentina '],
+ ['Bv. San Juan 399 Cordoba Capital  argentina '],
+ ['Los Reartes 9009 Cordoba Capital  argentina '],
+ ['Sarmiento 163 Villa Dolores  argentina '],
+ ['Av. Juan B. Justo 9637 Cordoba Capital  argentina '],
+ ['Ojo de Agua 102 Villa General Belgrano  argentina '],
+ ['San Martin 221 Cruz del Eje  argentina '],
+ ['Bv. Moyano 233 Oliva  argentina '],
+ ['Alfonsina Storni 37 Cordoba Capital  argentina '],
+ ['Av. Juan B. Justo 2202 Cordoba Capital  argentina '],
+ ['Felipe Erdman 199 Villa Dolores  argentina '],
+ ['27 de Abril 284 Cordoba Capital  argentina '],
+ ['Av. Rafael Nunez 4053 Cordoba Capital  argentina '],
+ ['Av. Rafael Nunez 3660 Cordoba Capital  argentina '],
+ ['Bv. Chacabuco 79 Cordoba Capital  argentina '],
+ ['Bv. Chacabuco 588 Cordoba Capital  argentina '],
+ ['Av. Colon 717 Cordoba Capital  argentina '],
+ ['Av. Colon 66 Cordoba Capital  argentina '],
+ ['Av. Estrada 153 Cordoba Capital  argentina '],
+ ['Lavalleja 34 Cordoba Capital  argentina '],
+ ['Aeropuerto+Internacional+Ing+Ambrosio+Taravella Cordoba Capital  argentina '],
+ ['Av. Velez Sarsfield 294 Cordoba Capital  argentina '],
+ ['Hipolito Yrigoyen 384 Cordoba Capital  argentina '],
+ ['Av, Velez Sarsfield 570 La Calera  argentina '],
+ ['Bv. Chacabuco 200 Cordoba Capital  argentina '],
+ ['Av. San Martin 802 Rio Tercero  argentina '],
+ ['San Juan Bosco 410 Alta Gracia  argentina '],
+ ['Caraffa 305 La Cumbre  argentina '],
+ ['Almirante Brown 1217 Jesus Maria  argentina '],
+ ['Av. Belgrano 206 Salsipuedes  argentina '],
+ ['Paraguay 155 Alta Gracia  argentina '],
+ ['Av. Richieri 3210 Cordoba Capital  argentina '],
+ ['Av. Fuerza Aerea 4372 Cordoba Capital  argentina '],
+ ['Francisco Ramirez 602 Malagueno  argentina '],
+ ['Av. Belgrano  Agua de Oro  argentina '],
+ ['Av. San Martin 56 Alta Gracia  argentina '],
+ ['Av. San Martin 2192 Villa Carlos Paz  argentina '],
+ ['Chacabuco 891 Cordoba Capital  argentina '],
+ ['San Martin 142 Dean Funes  argentina '],
+ ['Av. Tissera 2997 Mendiolaza  argentina '],
+ ['Cordoba 268 Jesus Maria  argentina '],
+ ['Ambrosio Olmos 686 Cordoba Capital  argentina '],
+ ['Chacabuco 682 Cordoba Capital  argentina '],
+ ['Urien 1794 Cordoba Capital  argentina '],
+ ['Malvinas Argentinas 1031 Jesus Maria  argentina '],
+ ['25 de Mayo 173 Rio Tercero  argentina '],
+ ['Independencia 138 Rio Tercero  argentina '],
+ ['Emilio Lamarca 3918 Cordoba Capital  argentina '],
+ ['Velez Sarsfield 253 Oncativo  argentina '],
+ ['9 de Julio 31 Villa Carlos Paz  argentina '],
+ ['Dean Funes 444 Cordoba Capital  argentina '],
+ ['Av. Colon 4276 Cordoba Capital  argentina '],
+ ['Fuerza Aerea 1700  Cordoba Capital  argentina '],
+ ['Av. Fuerza Aerea 2080 Cordoba Capital  argentina '],
+ ['Av. San Martin 3895 Colonia Caroya  argentina '],
+ ['Av. San Martin 1901 Colonia Caroya  argentina '],
+ ['General Paz 570 Laguna Larga  argentina '],
+ ['Obispo Trejo 602 Cordoba Capital  argentina '],
+ ['Jacinto Rios esq. Oncativo Cordoba Capital  argentina '],
+ ['Bv. Chacabuco 1181 Cordoba Capital  argentina '],
+ ['Av. Roque Saenz Pena 364 Villa Allende  argentina '],
+ ['Av. Recta Martinoli 8702 Cordoba Capital  argentina '],
+ ['Los Nomeolvides 2399 La Calera  argentina '],
+ ['Av. San Martin 3110 Unquillo  argentina '],
+ ['Buenos Aires 310 Villa de Maria del Rio Seco  argentina '],
+ ['Av. San Martin 1049 Villa Carlos Paz  argentina '],
+ ['Bodereau 7571 Cordoba Capital  argentina '],
+ ['Bv. Chacabuco 155 Cordoba Capital  argentina '],
+ ['Buenos Aires 855 Cordoba Capital  argentina '],
+ ['San Jose de Calasanz Esq. Espana Mendiolaza  argentina '],
+ ['Alvear 500 Cordoba Capital  argentina '],
+ ['Lucas V. Cordoba 651 Alta Gracia  argentina '],
+ ['Arenales 461 Despenaderos  argentina '],
+ ['Juan Bautista Alberdi 1276 Pilar  argentina '],
+ ['Av. Rafael Nunez 4406 Cordoba Capital  argentina '],
+ ['Mariano Fragueiro 2400 Cordoba Capital  argentina '],
+ ['Julio A. Roca 157 Villa General Belgrano  argentina '],
+ ['Pettoruti 2611 Cordoba Capital  argentina '],
+ ['Julio A. Roca 23 Villa General Belgrano  argentina '],
+ ['Sarmiento 284 Cruz del Eje  argentina '],
+ ['Av. Argentina 890 Icho Cruz  argentina '],
+ ['Int. Matta 297 Oncativo  argentina '],
+ ['Las Magnolias 91 Villa General Belgrano  argentina '],
+ ['Rivadavia 420 Capilla del Monte  argentina '],
+ ['Paraguay 321 Alta Gracia  argentina '],
+ ['Av. Buenos Aires 1099 Almafuerte  argentina '],
+ ['Av. Valparaiso 3874 Cordoba Capital  argentina '],
+ ['Cordoba 398 Dean Funes  argentina '],
+ ['Roberto Cayol 3150 Cordoba Capital  argentina '],
+ ['27 de Abril 99 Cordoba Capital  argentina '],
+ ['Alvear 519 Cruz del Eje  argentina '],
+ ['Libertad 1100 Cordoba Capital  argentina '],
+ ['Alberdi 91 Villa Carlos Paz  argentina '],
+ ['Av. Ricardo Rojas 6806 Cordoba Capital  argentina '],
+ ['Av. Estrada 199 Cordoba Capital  argentina '],
+ ['25 de Mayo 43 Dean Funes  argentina '],
+ ['Hipolito Yrigoyen 305 Laguna Larga  argentina '],
+ ['Remedios de Escalada esq. Mitre Nono  argentina '],
+ ['Velez Sarsfield  La Paz  argentina '],
+ ['Av. Belgrano 199 Alta Gracia  argentina '],
+ ['Av. General Paz 792 Laguna Larga  argentina '],
+ ['Gregorio Gavier 1922 Cordoba Capital  argentina '],
+ ['Av. Sabattini 1814 Cordoba Capital  argentina '],
+ ['Jacinto de Altolaguirre 2619 Cordoba Capital  argentina '],
+ ['Jacinto de Altolaguirre 1701 Cordoba Capital  argentina '],
+ ['Roque Saenz Pena 746 Rio Tercero  argentina '],
+ ['Esperanza 1271 Rio Tercero  argentina '],
+ ['Agustin Garzon 1252 Cordoba Capital  argentina '],
+ ['Rodriguez del Busto 4086 Cordoba Capital  argentina '],
+ ['Av. Tronador 1992 Cordoba Capital  argentina '],
+ ['Ituzaingo 602 Cordoba Capital  argentina '],
+ ['Arenales 591 Despenaderos  argentina '],
+ ['Mons. Pablo Cabrera 4483 Cordoba Capital  argentina '],
+ ['Ricardo Balbin 48 Villa Allende  argentina '],
+ ['Av. Goycoechea 1027 Villa Allende  argentina '],
+ ['Av. Mitre 155 Rio Primero  argentina '],
+ ['Av. O higgins 5845 Cordoba Capital  argentina '],
+ ['Francisco de Laprida 41 Cordoba Capital  argentina '],
+ ['Rafael Nunez 4220 Cordoba Capital  argentina '],
+ ['Santa Rosa 1565 Cordoba Capital  argentina '],
+ ['Santa Rosa 794 Cordoba Capital  argentina '],
+ ['Av. Gral. Paz 258 Cordoba Capital  argentina '],
+ ['Av. Gral. Paz 526 Cordoba Capital  argentina '],
+ ['Belgrano 66 Cordoba Capital  argentina '],
+ ['Oncativo 1358 Cordoba Capital  argentina '],
+ ['Lucas V. Cordoba 240 Alta Gracia  argentina '],
+ ['Av San Martin 528 Salsipuedes  argentina '],
+ ['Jujuy 502 Cordoba Capital  argentina '],
+ ['Oncativo 1307 Cordoba Capital  argentina '],
+ ['Lascano Colodrero 2771 Cordoba Capital  argentina '],
+ ['Dr. Manuel Belgrano 444 Oncativo  argentina '],
+ ['Gral. Campos 809 Pilar  argentina '],
+ ['Av. del Libertador 1069 Alta Gracia  argentina '],
+ ['Av. Valparaiso 3874 Cordoba Capital  argentina '],
+ ['Av. del Libertador 1675 Alta Gracia  argentina '],
+ ['Naciones Unidas 927 Cordoba Capital  argentina '],
+ ['Av. Fuerza Aerea 4730 Cordoba Capital  argentina '],
+ ['Av. Velez Sarfield 4101 Cordoba Capital  argentina '],
+ ['Av. Renault 1916 Cordoba Capital  argentina '],
+ ['Mons. Pablo Cabrera 4650 Cordoba Capital  argentina '],
+ ['Diego Diaz 691 Cordoba Capital  argentina '],
+ ['Sarmiento 47 Cordoba Capital  argentina '],
+ ['Bv. Illia 208 Cordoba Capital  argentina '],
+ ['Av. Colon 302 Cordoba Capital  argentina '],
+ ['Sarmiento 436 La Falda  argentina '],
+ ['Jose P. Otero 1296 Cordoba Capital  argentina '],
+ ['Av. Colon 801 Cordoba Capital  argentina '],
+ ['Av. Fuerza Aerea 2950 Cordoba Capital  argentina '],
+ ['Av. Rafael Nunez 4683 Cordoba Capital  argentina '],
+ ['Av. San Martin 1628 Unquillo  argentina '],
+ ['San Martin 2638 Unquillo  argentina '],
+ ['Av. San Martin 6602 Rio Ceballos  argentina '],
+ ['Ciudad de Valparaiso 3080 Cordoba Capital  argentina '],
+ ['Bv. Sarmiento 599 Villa Carlos Paz  argentina '],
+ ['9 de Julio 165 Villa Carlos Paz  argentina '],
+ ['Av. Carcano 2280 Villa Carlos Paz  argentina '],
+ ['Bartolome Jaime  La Cumbre  argentina '],
+ ['Espana 109 Alta Gracia  argentina '],
+ ['9 de Julio 859 Cordoba Capital  argentina '],
+ ['Av. Colon 6051 Cordoba Capital  argentina '],
+ ['Mauricio Yadarola 1699 Cordoba Capital  argentina '],
+ ['Av. Circunvalacion 2557 Cordoba Capital  argentina '],
+ ['Olmos 102 Alta Gracia  argentina '],
+ ['Las Heras 151 Oncativo  argentina '],
+ ['Av. Ambrosio Olmos 950 Cordoba Capital  argentina '],
+ ['Ruta 28 1861 Tanti  argentina '],
+ ['Gines Garcia 4049 Cordoba Capital  argentina '],
+ ['Juan Jose Paso 72 Oncativo  argentina '],
+ ['Eva Peron 209 La Calera  argentina '],
+ ['General Paz 195 La Calera  argentina '],
+ ['San Martin 526 La Calera  argentina '],
+ ['Av. San Martin 5049 Rio Ceballos  argentina '],
+ ['Belgrano 402 Malagueno  argentina '],
+ ['Belgrano 850 Oncativo  argentina '],
+ ['25 de Mayo 618 Oncativo  argentina '],
+ ['Av. Los Sauces 400 Villa Carlos Paz  argentina '],
+ ['Av. Uruguay 890 Villa Carlos Paz  argentina '],
+ ['Tucuman esq. Zipoli Jesus Maria  argentina '],
+ ['Tucuman 453 Jesus Maria  argentina '],
+ ['Bv. Aguero 45 Jesus Maria  argentina '],
+ ['Av. Goycoechea 557 Villa Allende  argentina '],
+ ['Julio A. Roca 294 Villa General Belgrano  argentina '],
+ ['Av. San Martin 5 Villa General Belgrano  argentina '],
+ ['Italia 631 Jesus Maria  argentina '],
+ ['Belgrano 301 La Cumbre  argentina '],
+ ['Av. Pte. Illia 15 Villa Dolores  argentina '],
+ ['Belgrano 149 Villa Dolores  argentina '],
+ ['Av. San Martin 603 Mina Clavero  argentina '],
+ ['Av. Sabattini 2393 Cordoba Capital  argentina '],
+ ['Bv. Allende esq Pedro J. Frias Villa del Totoral  argentina '],
+ ['Av. San Martin 4426 Rio Ceballos  argentina '],
+ ['Av. Goycoechea 615 Villa Allende  argentina '],
+ ['Sarmiento 1201 esq. Rivadavia Rio Segundo  argentina '],
+ ['25 de Mayo 618 Pilar  argentina '],
+ ['Hipolito Yrigoyen 601 Villa del Rosario  argentina '],
+ ['Av. Don Bosco esq. Sarmiento Los Condores  argentina '],
+ ['Bv. Lazarte 643 Tancacha  argentina '],
+ ['Av. San Martin 130 Villa del Dique  argentina '],
+ ['Av. San Martin 501 Villa Carlos Paz  argentina '],
+ ['Santa Fe esq. L. N. Alem Rio Segundo  argentina '],
+ ['J. R. y Alvarado 3764 Cordoba Capital  argentina '],
+ ['Sarmiento 1074 Rio Segundo  argentina '],
+ ['Av. del Libertador 1395 Alta Gracia  argentina '],
+ ['Hipolito Yrigoyen 557 Laguna Larga  argentina '],
+ ['Bv. Las Flores 234 Villa Giardino  argentina '],
+ ['Sarmiento 29 Almafuerte  argentina '],
+ ['Riemann 450 Villa Rumipal  argentina '],
+ ['Cabo 1 Huinca 107 Embalse  argentina '],
+ ['David Linares 35 Monte Cristo  argentina '],
+ ['Av. Sarmiento 381 Monte Cristo  argentina '],
+ ['Av. Mitre 1624 Mina Clavero  argentina '],
+ ['Ameghino 402 Jesus Maria  argentina '],
+ ['Giovanetti esq. Rossi Las Penas  argentina '],
+ ['Tomas Garzon 785 Pilar  argentina '],
+ ['Recta Martinoli 6191 Cordoba Capital  argentina '],
+ ['Bv. Chacabuco 687 Cordoba Capital  argentina '],
+ ['San Martin 129 Luque  argentina '],
+ ['Av. Roberto Cayol 3286 Cordoba Capital  argentina '],
+ ['Av. Colon 1881 Cordoba Capital  argentina '],
+ ['Bernardino Rivadavia 160 Quilino  argentina '],
+ ['Av. Duarte Quiros 4439 Cordoba Capital  argentina '],
+ ['San Martin 56 Valle Hermoso  argentina '],
+ ['Carrillo 2 Rio Primero  argentina '],
+ ['Av. O Higgins 3150 Cordoba Capital  argentina '],
+ ['Roque Saenz Pena 156 Oliva  argentina '],
+ ['Av. Sabattini 2314 Cordoba Capital  argentina '],
+ ['Bv. Los Granaderos 2942 Cordoba Capital  argentina '],
+ ['Fragueiro 1394 Cordoba Capital  argentina '],
+ ['Bv. Los Granaderos 2108 Cordoba Capital  argentina '],
+ ['Ruta 19  Piquillin  argentina '],
+ ['Av. Gral. Savio Esq. San Miguel Rio Tercero  argentina '],
+ ['Acuna y Fray Justo Santa Maria de Oro Rio Tercero  argentina '],
+ ['Carlos Vega 399 Rio Tercero  argentina '],
+ ['Catalina Rodriguez 160 Laguna Larga  argentina '],
+ ['Av. Carcano 610 Villa Carlos Paz  argentina '],
+ ['Av. San Martin 945 Huerta Grande  argentina '],
+ ['Av. Carlos Gauss 5500 Cordoba Capital  argentina '],
+ ['Av. Uruguay 493 Villa Carlos Paz  argentina '],
+ ['Elpidio Gonzalez 61 Villa Allende  argentina '],
+ ['Duarte Quiros 5245 Cordoba Capital  argentina '],
+ ['Garibaldi 329 Rio Tercero  argentina '],
+ ['J.J. Magnasco y Roque Saenz Pena Rio Tercero  argentina '],
+ ['Av. Colon 2806 Cordoba Capital  argentina '],
+ ['Av. Sarmiento 415 Alta Gracia  argentina '],
+ ['Villa Santa Cruz del Lago Villa Santa Cruz del Lago  argentina '],
+ ['Cesar Duayen 3255 Cordoba Capital  argentina '],
+ ['Av. Donato Alvarez 7639 Cordoba Capital  argentina '],
+ ['Av. Rafael Nunez 5471 Cordoba Capital  argentina '],
+ ['Independencia 765 Cordoba Capital  argentina '],
+ ['Obispo Oro 40 Cordoba Capital  argentina '],
+ ['Belgrano 411 Villa Dolores  argentina '],
+ ['Av. Republica  Toledo  argentina '],
+ ['Av. San Martin 553 Tancacha  argentina '],
+ ['25 de Mayo 151 Cordoba Capital  argentina '],
+ ['Buenos Aires 128 Cordoba Capital  argentina '],
+ ['Av. 24 de Septiembre 1006 Cordoba Capital  argentina '],
+ ['Av. Menendez Pidal 3748 Cordoba Capital  argentina '],
+ ['Av. Velez Sarsfield 361 Cordoba Capital  argentina '],
+ ['F. L. Beltran y M. Cardenosa  Cordoba Capital  argentina '],
+ ['Hugo Wast esq. Luis de Tejeda Cordoba Capital  argentina '],
+ ['Jose Goyechea 2851 Cordoba Capital  argentina '],
+ ['Naciones Unidas 346 Cordoba Capital  argentina '],
+ ['Sargento Cabral 1374 Cordoba Capital  argentina '],
+ ['Ruta Provincial N 5 Anisacate  argentina '],
+ ['San Pedro 195 Rio Tercero  argentina '],
+ ['Av. Ambrosio Olmos 773  Cordoba Capital  argentina '],
+ ['Rondeau 475 Cordoba Capital  argentina '],
+ ['Av. Jose I. Peralta 580 Villa de Soto  argentina '],
+ ['Terminal de Omnibus  Cordoba Capital  argentina '],
+ ['Av. Ohiggins 3765 Cordoba Capital  argentina '],
+ ['27 de Abril 399 Cordoba Capital  argentina '],
+ ['Bajada Pucara 1725 Cordoba Capital  argentina '],
+ ['Vicente Aguero 336 Jesus Maria  argentina '],
+ ['Italia 399 Jesus Maria  argentina '],
+ ['Tucuman 533 Jesus Maria  argentina '],
+ ['Presidente Peron 265 Villa del Totoral  argentina '],
+ ['Av. Ricchieri 3316 Cordoba Capital  argentina '],
+ ['Santiago Derqui 24 Villa Allende  argentina '],
+ ['27 de Abril 474 Cordoba Capital  argentina '],
+ ['Ambrosio Olmos 595 Cordoba Capital  argentina '],
+ ['Rodriguez Pena 1800 Cordoba Capital  argentina '],
+ ['Libertad 76  Rio Tercero  argentina '],
+ ['24 de Septiembre 2415 Cordoba Capital  argentina '],
+ ['Jose de Goyechea 2851  Cordoba Capital  argentina '],
+ ['Toledo 1812 Cordoba Capital  argentina '],
+ ['Sarmiento 1469 Cordoba Capital  argentina '],
+ ['Av. Sabattini 4097 Cordoba Capital  argentina '],
+ ['Av. Armada Argentina 144 Cordoba Capital  argentina '],
+ ['Capital Federal esq. Eden La Falda  argentina '],
+ ['Av. Eden esq. Merovich La Falda  argentina '],
+ ['Av. Velez Sarsfield 600 Rio Tercero  argentina ']
+];
+        var map;
+        var panorama;
+        var lat;
+        var lng;
+        var latlng;
+        var num=0;
+        var address = document.getElementById('address').value;
+        var geo;
+        function initMap() {
+            var berkeley = { lat: -31.409364,lng: -64.189197 };
+           var sv = new google.maps.StreetViewService();
+  
+            panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'));
+
+            // Set up the map.
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: berkeley,
+                zoom: 16,
+              
+
+                streetViewControl: false
+            });
+            map.setOptions({styles: stylesArray0});
+          
+            var geocoder = new google.maps.Geocoder();
+
+
+          
+            // Set the initial Street View camera to the center of the map
+            sv.getPanorama({ location: berkeley, radius: 50 }, processSVData);
+
+            // Look for a nearby Street View panorama when the map is clicked.
+            // getPanoramaByLocation will return the nearest pano when the
+            // given radius is 50 meters or less.
+            map.addListener('click', function (event) {
+                sv.getPanorama({ location: event.latLng, radius: 50 }, processSVData);
+            });
+        }
+        function geocodeAddress(geocoder, resultsMap) {
+            var geocoder = new google.maps.Geocoder();
+            var address = document.getElementById('address').value;
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    geo = results[0].geometry.location;
+                     //resultsMap.setCenter(results[0].geometry.location);
+                   // sv.getPanorama({ location: results[0].geometry.location, radius: 50 }, processSVData);
+                    codeAddress();
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+
+         
+        function processSVData(data, status) {
+            if (status === google.maps.StreetViewStatus.OK) {
+               // var marker = new google.maps.Marker({
+               //     position: data.location.latLng,
+              //      map: map,
+             //       title: data.location.description
+              //  });
+
+                panorama.setPano(data.location.pano);
+                panorama.setPov({
+                    heading: 270,
+                    pitch: 0
+                });
+                panorama.setVisible(true);
+
+                marker.addListener('click', function () {
+                    var markerPanoID = data.location.pano;
+                    // Set the Pano to use the passed panoID.
+                    panorama.setPano(markerPanoID);
+                    panorama.setPov({
+                        heading: 180,
+                        pitch: 0
+                    });
+                    panorama.setVisible(true);
+                });
+            } else {
+                alert('No hay street view en esa locacion.');
+            }
+        }
+        function codeAddress() {
+            var sv = new google.maps.StreetViewService();
+  
+            var geocoder = new google.maps.Geocoder();
+            //var address = document.getElementById("address").value;
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    geo = results[0].geometry.location
+ sv.getPanorama({ location: results[0].geometry.location, radius: 50 }, processSVData);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                          });
+                    
+                } else {
+                    alert("Geocode no tuvo �xito por la siguiente raz�n: " + status);
+                }
+            });
+        }
+
+
+
+
+        function busca_onclick() {
+            document.getElementById('direccion').value = direciones[num];
+            address = document.getElementById('direccion').value
+            num = num + 1;
+            geocodeAddress()
+        }
+
+
+
+        function submit_onclick() {
+            geocodeAddress()
+        }
+
+    </script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOSZjdxTpuXGpMyNo47H69zJynj3pR3wA&signed_in=true&callback=initMap"
+        async defer>
+    </script>
+  </body>
+</html>

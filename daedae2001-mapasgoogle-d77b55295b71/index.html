@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <link rel="stylesheet" media="screen,projection" type="text/css" href="./css/principal.css" />
+  <script type="text/javascript" src="./js/datos.js"></script> 
+  <script type="text/javascript" src="./js/funciones.js"></script>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Control options</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #map {
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+ <div id="menu">
+    <input type="text" id="hi" name="usuario" value=0>
+
+
+ </div>
+ 
+  <div id="map"></div>
+  <script>
+    var map
+    var markers = [];
+    var zoom;
+    var xx;
+    var yy;
+    var la_center = -31.368244
+    var lg_center = -64.232644
+    var etiquetainfiwindows  
+        var lat1  
+        var long1  
+        var lat2  
+        var long2  
+        var tam_f  
+        var zom  
+        var escala  
+        var prestador  
+        var direccion 
+        var frecuencia  
+        var facturado 
+        var color_f  
+
+
+
+
+    function myMap() {
+      var mapProp = {
+        center: {
+          lat: la_center,
+          lng: lg_center
+        },
+        zoom: 13,
+       // mapTypeControl: true,//scaleControl: true,
+      };
+       map = new google.maps.Map(document.getElementById("map"), mapProp);
+      var styledMap = new google.maps.StyledMapType(stylesArray, {
+        name: "Styled Map"
+      });
+      map.mapTypes.set('map_style', styledMap);
+      map.setMapTypeId('map_style');
+    
+       map.addListener('zoom_changed', function() {
+     
+       //ms_hi1(Event);
+        //setTimeout(function(){drop();}, 500);
+      setMarkers(map, farmacias);
+      
+      });
+       
+     setMarkers(map, farmacias);
+      
+    }
+ 
+    
+    function setMarkers(map, farmacias) {
+    clearMarkers();
+      markers = [];
+
+      for (var i = 0; i < farmacias.length; i++) {
+setTimeout(function(){  }, 5500);
+         etiquetainfiwindows = farmacias[i][0]
+         lat1 = farmacias[i][2]
+         long1 = farmacias[i][3]
+         lat2 = farmacias[i][2]
+         long2 = farmacias[i][3]
+         tam_f = farmacias[i][6] /8* ( convierte_escala_zoom( map.getZoom()))
+         zom =  map.getZoom()
+         escala =  ( convierte_escala_zoom( map.getZoom()))
+         prestador = farmacias[i][0]
+         direccion = farmacias[i][1]
+         frecuencia = farmacias[i][4]
+         facturado = farmacias[i][5]
+         color_f = farmacias[i][8]
+         a = document.getElementById("hi");
+        a.value =" zoom "+convierte_escala_zoom( map.getZoom()) +"tam_f "+ tam_f  ;
+
+        latlngset = new google.maps.LatLng(lat1, long1);
+
+        var image = {
+          url: './imagenes/CF4.gif',
+          scaledSize: new google.maps.Size( tam_f , tam_f ),
+          strokeOpacity: 0.9  }; //origin: new google.maps.Point(0, 0),//anchor: new google.maps.Point(17, 34),size: new google.maps.Size(71, 71), 
+
+         marker = new google.maps.Marker({
+         map: map,
+          title: etiquetainfiwindows,
+          position: latlngset,
+         icon: { path: "M27.648 -41.399q0 -3.816 -2.7 -6.516t-6.516 -2.7 -6.516 2.7 -2.7 6.516 2.7 6.516 6.516 2.7 6.516 -2.7 2.7 -6.516zm9.216 0q0 3.924 -1.188 6.444l-13.104 27.864q-0.576 1.188 -1.71 1.872t-2.43 0.684 -2.43 -0.684 -1.674 -1.872l-13.14 -27.864q-1.188 -2.52 -1.188 -6.444 0 -7.632 5.4 -13.032t13.032 -5.4 13.032 5.4 5.4 13.032z",
+                scale: 0.6,
+                strokeWeight: 0.2,
+                strokeColor: 'black',
+                strokeOpacity:0.4,
+                fillColor: color_f,
+                fillOpacity: 1,
+            },// icon: image,
+          optimized: false,
+          draggable: false,
+          alpha: 0.7,
+          flat: true, 
+          animation:google.maps.Animation.DROP,
+         
+        }); 
+       
+       //var contentString = html_info_market_1(etiquetainfiwindows, escala, zom,color_f );
+
+       var content = html_info_market_1(etiquetainfiwindows, escala, zom,color_f  )
+
+       var infowindow = new google.maps.InfoWindow()
+
+        google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+          return function () {
+            infowindow.setContent(content);
+            infowindow.open(map, marker);   };   })(marker, content, infowindow)); 
+
+ addMarkerWithTimeout(marker,400,tam_f,color_f)
+
+      }//cierre for
+ //showMarkers()
+    }
+
+
+
+     function drop() {
+        clearMarkers();
+        for (var i = 0; i < neighborhoods.length; i++) {
+          // Se agrega un marker con un tiempo diferente
+         // addMarkerWithTimeout(neighborhoods[i], i * 1000);
+
+        }
+      }
+       
+      // Agrega un marker con una animación después de un tiempo (timeout)
+      function addMarkerWithTimeout(marker, timeout,tam_f,color_f) {
+        window.setTimeout(function() {
+       var cityCircle = new google.maps.Circle({
+      strokeColor: color_f,
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor:  color_f,
+      fillOpacity: 0.7,
+      map: map,
+      center: marker.position,
+      radius: tam_f //Math.sqrt(citymap[city].population) * tam_f
+    });
+      // markers.push(marker);
+
+        }, timeout);
+      }
+       
+      // Elimina los markers del mapa
+      function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+        markers = [];
+      }
+   
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAokBagH1RuklshFgw5THHzLHXFTt6Pk2Q&callback=myMap">
+   
+  </script>
+    <input type="text" id="hi" name="usuario" value=0>
+</body>
+
+</html>

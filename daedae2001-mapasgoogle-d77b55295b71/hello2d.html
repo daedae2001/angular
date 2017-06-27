@@ -1,0 +1,342 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <title>CanvasLayer 2d Example</title>
+  <style>
+    html,
+    body,
+    #map-div {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+  </style>
+  <script type="text/javascript" src="./js/datos.js"></script>
+  <script type="text/javascript" src="./js/funciones.js"></script>
+   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAokBagH1RuklshFgw5THHzLHXFTt6Pk2Q"></script>
+  <script src="./js/CanvasLayer.js"></script>
+
+  <script>
+    var markers = [];
+    var zoom;
+    var xx;
+    var yy;
+    var la_center = -31.368244
+    var lg_center = -64.232644
+    var map;
+    var canvasLayer;
+    var context;
+    var canvasLayer = new CanvasLayer()
+
+    function myMap() {
+      var mapProp = {
+        center: {
+          lat: la_center,
+          lng: lg_center
+        },
+        zoom: 13,
+        // mapTypeControl: true,//scaleControl: true,
+      };
+      map = new google.maps.Map(document.getElementById("map-div"), mapProp);
+      var styledMap = new google.maps.StyledMapType(stylesArray, {
+        name: "Styled Map"
+      });
+      map.mapTypes.set('map_style', styledMap);
+      map.setMapTypeId('map_style');
+
+      map.addListener('zoom_changed', function () {
+
+        //ms_hi1(Event);
+        //setTimeout(function(){drop();}, 500);
+        setMarkers(map, farmacias);
+
+      });
+
+      setMarkers(map, farmacias);
+
+    }
+
+
+    function setMarkers(map, farmacias) {
+      clearMarkers();
+      markers = [];
+
+      for (var i = 0; i < farmacias.length; i++) {
+        setTimeout(function () { }, 5500);
+        var etiquetainfiwindows = farmacias[i][0]
+        var lat1 = farmacias[i][2]
+        var long1 = farmacias[i][3]
+        var lat2 = farmacias[i][2]
+        var long2 = farmacias[i][3]
+        var tam_f = farmacias[i][6] / 10 * (convierte_escala_zoom(map.getZoom()))
+        var zom = map.getZoom()
+        var escala = (convierte_escala_zoom(map.getZoom()))
+        var prestador = farmacias[i][0]
+        var direccion = farmacias[i][1]
+        var frecuencia = farmacias[i][4]
+        var Facturado = farmacias[i][5]
+
+        var a  = " zoom " + convierte_escala_zoom(map.getZoom()) + "tam_f " + tam_f;
+        
+
+        latlngset = new google.maps.LatLng(lat1, long1);
+
+        var image = {
+          url: './imagenes/CF4.gif',
+          scaledSize: new google.maps.Size(tam_f, tam_f),
+          strokeOpacity: 0.9 
+        }; //origin: new google.maps.Point(0, 0),//anchor: new google.maps.Point(17, 34),size: new google.maps.Size(71, 71), 
+
+        marker = new google.maps.Marker({
+          map: map,
+          title: etiquetainfiwindows,
+          position: latlngset,
+          icon: image,
+          optimized: false,
+          draggable: false,
+          alpha: 0.7,
+          flat: true,
+          animation: google.maps.Animation.DROP,
+          // animation:google.maps.Animation.BOUNCE,
+
+        }); //alpha=opacidad , flat=permite cambiar la orientacion del marcador
+
+        var contentString = html_info_market_1(etiquetainfiwindows, escala, zom);
+
+        var content = html_info_market_1(etiquetainfiwindows, escala, zom)
+
+        var infowindow = new google.maps.InfoWindow()
+
+        google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+          return function () {
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+          };
+        })(marker, content, infowindow));
+
+        addMarkerWithTimeout(marker, 400)
+
+
+
+      } //cierre for
+      //showMarkers()
+    }
+
+
+
+     
+    function drop() {        
+      clearMarkers();        
+      for (var i = 0; i < neighborhoods.length; i++) {           // Se agrega un marker con un tiempo diferente
+                  
+        addMarkerWithTimeout(neighborhoods[i], i * 1000);        
+      }      
+    }              // Agrega un marker con una animación después de un tiempo (timeout)
+          
+    function addMarkerWithTimeout(marker, timeout) {        
+      window.setTimeout(function () {          
+        markers.push(marker);        
+      }, timeout);      
+    }              // Elimina los markers del mapa
+    function clearMarkers() {        
+      for (var i = 0; i < markers.length; i++) {          
+        markers[i].setMap(null);        
+      }        
+      markers = [];      
+    }
+
+    //-------------------------------------------------------------------
+
+
+    //var rectLatLng = new google.maps.LatLng(40, -95);
+    //var rectWidth = 6.5;
+
+    var resolutionScale = window.devicePixelRatio || 1;
+
+    function init() {
+      // initialize the map
+      var mapProp = {
+        center: {
+          lat: la_center,
+          lng: lg_center
+        },
+        zoom: 13,
+        // mapTypeControl: true,//scaleControl: true,
+      };
+      map = new google.maps.Map(document.getElementById("map-div"), mapProp);
+      var styledMap = new google.maps.StyledMapType(stylesArray, {
+        name: "Styled Map"
+      });
+      map.mapTypes.set('map_style', styledMap);
+      map.setMapTypeId('map_style');
+
+      map.addListener('zoom_changed', function () {
+
+        //ms_hi1(Event);
+        //setTimeout(function(){drop();}, 500);
+        setMarkers(map, farmacias);
+
+      });
+
+      setMarkers(map, farmacias);
+
+    }
+
+
+    function setMarkers(map, farmacias) {
+      clearMarkers();
+      markers = [];
+
+      for (var i = 0; i < farmacias.length; i++) {
+        setTimeout(function () { }, 5500);
+        var etiquetainfiwindows = farmacias[i][0]
+        var lat1 = farmacias[i][2]
+        var long1 = farmacias[i][3]
+        var lat2 = farmacias[i][2]
+        var long2 = farmacias[i][3]
+        var tam_f = farmacias[i][6] / 10 * (convierte_escala_zoom(map.getZoom()))
+        var zom = map.getZoom()
+        var escala = (convierte_escala_zoom(map.getZoom()))
+        var prestador = farmacias[i][0]
+        var direccion = farmacias[i][1]
+        var frecuencia = farmacias[i][4]
+        var Facturado = farmacias[i][5]
+
+        var a = document.getElementById("hi");
+        a.value = " zoom " + convierte_escala_zoom(map.getZoom()) + "tam_f " + tam_f;
+
+        latlngset = new google.maps.LatLng(lat1, long1);
+
+        var image = {
+          url: './imagenes/CF4.gif',
+          scaledSize: new google.maps.Size(tam_f, tam_f),
+          strokeOpacity: 0.9 
+        }; //origin: new google.maps.Point(0, 0),//anchor: new google.maps.Point(17, 34),size: new google.maps.Size(71, 71), 
+
+        marker = new google.maps.Marker({
+          map: map,
+          title: etiquetainfiwindows,
+          position: latlngset,
+          icon: image,
+          optimized: false,
+          draggable: false,
+          alpha: 0.7,
+          flat: true,
+          animation: google.maps.Animation.DROP,
+          // animation:google.maps.Animation.BOUNCE,
+
+        }); //alpha=opacidad , flat=permite cambiar la orientacion del marcador
+
+        var contentString = html_info_market_1(etiquetainfiwindows, escala, zom);
+
+        var content = html_info_market_1(etiquetainfiwindows, escala, zom)
+
+        var infowindow = new google.maps.InfoWindow()
+
+        google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+          return function () {
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+          };
+        })(marker, content, infowindow));
+
+        addMarkerWithTimeout(marker, 400)
+
+
+
+      } //cierre for
+      //showMarkers()
+    }
+
+
+
+     
+    function drop() {        
+      clearMarkers();        
+      for (var i = 0; i < neighborhoods.length; i++) {           // Se agrega un marker con un tiempo diferente
+                  
+        addMarkerWithTimeout(neighborhoods[i], i * 1000);        
+      }      
+    }              // Agrega un marker con una animación después de un tiempo (timeout)
+          
+    function addMarkerWithTimeout(marker, timeout) {        
+      window.setTimeout(function () {          
+        markers.push(marker);        
+      }, timeout);      
+    }              // Elimina los markers del mapa
+    function clearMarkers() {        
+      for (var i = 0; i < markers.length; i++) {          
+        markers[i].setMap(null);        
+      }        
+      markers = [];
+
+      // initialize the canvasLayer
+      var canvasLayerOptions = {
+        map1: map,
+        resizeHandler: resize,
+        animate: true,
+        updateHandler: update,
+        resolutionScale: resolutionScale
+      };
+      canvasLayer = new CanvasLayer(canvasLayerOptions);
+      context = canvasLayer.canvas.getContext('2d');
+    }
+
+    function resize() {
+      // nothing to do here
+    }
+
+    function update() {
+      // clear previous canvas contents
+      var canvasWidth = canvasLayer.canvas.width;
+      var canvasHeight = canvasLayer.canvas.height;
+      context.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      // we like our rectangles hideous
+      context.fillStyle = 'rgba(230, 77, 26, 1)';
+
+      /* We need to scale and translate the map for current view.
+       * see https://developers.google.com/maps/documentation/javascript/maptypes#MapCoordinates
+       */
+      var mapProjection = map.getProjection();
+
+      /**
+       * Clear transformation from last update by setting to identity matrix.
+       * Could use context.resetTransform(), but most browsers don't support
+       * it yet.
+       */
+      context.setTransform(1, 0, 0, 1, 0, 0);
+
+      // scale is just 2^zoom
+      // If canvasLayer is scaled (with resolutionScale), we need to scale by
+      // the same amount to account for the larger canvas.
+      var scale = Math.pow(2, map.zoom) * resolutionScale;
+      context.scale(scale, scale);
+
+      /* If the map was not translated, the topLeft corner would be 0,0 in
+       * world coordinates. Our translation is just the vector from the
+       * world coordinate of the topLeft corder to 0,0.
+       */
+      var offset = mapProjection.fromLatLngToPoint(canvasLayer.getTopLeft());
+      context.translate(-offset.x, -offset.y);
+
+      // project rectLatLng to world coordinates and draw
+      var worldPoint = mapProjection.fromLatLngToPoint(rectLatLng);
+      context.fillRect(worldPoint.x, worldPoint.y, rectWidth, rectWidth);
+    }
+
+   document.addEventListener('DOMContentLoaded', init, false);
+  </script>
+
+
+  </script>
+</head>
+
+<body>
+  <div id="map-div"></div>
+</body>
+
+</html>
