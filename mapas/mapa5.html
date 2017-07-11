@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="base para pagina con menu animado tipo material desing">
+  <meta name="author" content="daedae2001">
+ 
+  <!-- Chrome, Firefox OS and Opera
+  <meta name="theme-color" content="#fb4400">
+   Windows Phone 
+  <meta name="msapplication-navbutton-color" content="#fb4400">
+   iOS Safari 
+  <meta name="apple-mobile-web-app-status-bar-style" content="#fb4400">
+  -->
+  <title>OSDE Mapas</title>
+ <script type="text/javascript" src="./js/datos.js"></script>
+  <script type="text/javascript" src="./js/funciones.js"></script>
+
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiqjucZhXNWIIBWaHRZB9epebZUWrcYkM&callback=myMap" async defer>
+ </script>
+  <!-- Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+
+  <!-- CSS Libs -->
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/animate.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/dataTables.bootstrap.css">
+
+
+  <!-- CSS App -->
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <link rel="stylesheet" type="text/css" href="./css/flat-blue.css">
+  <link rel="stylesheet" type="text/css" href="./css/home.css">
+  <!-- Javascript Libs -->
+  <script type="text/javascript" src="./js/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="./js/ace.js"></script>
+  <script type="text/javascript" src="./js/mode-html.js"></script>
+  <script type="text/javascript" src="./js/theme-github.js"></script>
+  <script type="text/javascript" src="./js/jquery.easing.min.js"></script>
+
+  <script type="text/javascript" src="./js/angular.min.js"></script>
+  <script type="text/javascript" src="./js/angular-route.min.js"></script>
+
+  <!--App Javascript -->
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="text/javascript" src="./js/services.js"></script>
+  <script type="text/javascript" src="./js/index.js"></script>
+  <script type="text/javascript" src="./js/marketplace-list.js"></script>
+  <script type="text/javascript" src="./js/users.js"></script>
+
+  <style>
+       #map {
+        height: 900px;
+        width: 100%;
+       }
+    </style>
+  
+</head>
+
+<body class="flat-blue"  >
+ 
+ <script>
+
+     var map  ;
+    var markers = [];
+    var zoom;
+    var xx;
+    var yy;
+    var la_center = -31.368244
+    var lg_center = -64.232644
+    
+       
+
+    function myMap() {
+       var map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+          lat: la_center,
+          lng: lg_center
+        },
+        zoom: 13,
+        styles:stylesArray0
+        });
+        map.height= screen.height-50;
+         map.width= screen.width-150;
+       map.addListener('zoom_changed', function() {
+     
+      setMarkers(map, especiales);
+     
+      });
+       
+     setMarkers(map, especiales);
+      
+ function createMarker(options, html) {
+   
+    var marker = new google.maps.Marker(options);
+    if (html) {
+      google.maps.event.addListener(marker, "click", function () {
+        infoWindow.setContent(html);
+        infoWindow.open(options.map, this);
+      });
+    }
+    return marker;
+  }
+
+           }
+ 
+    
+    function setMarkers(map, especiales) {
+    clearMarkers();
+      markers = [];
+
+      for (var i = 0; i < especiales.length; i++) {
+        var etiquetainfiwindows =  especiales[i][2]
+        var lat1 = especiales[i][3]
+        var long1 = especiales[i][4]
+        var lat2 = especiales[i][3]
+        var long2 = especiales[i][4]
+        var tam_f = especiales[i][5]// /10* ( convierte_escala_zoom( map.getZoom()))
+        var zom =  map.getZoom()
+        var escala =  ( convierte_escala_zoom( map.getZoom()))
+        var prestador = especiales[i][0]
+        var direccion = especiales[i][1]
+        var frecuencia = especiales[i][4]
+        var Facturado = especiales[i][5]
+
+     //   var a = document.getElementById("hi");
+      //  a.value =" zoom "+convierte_escala_zoom( map.getZoom()) + " " +screen.width + " x " + screen.height ;
+
+        latlngset = new google.maps.LatLng(lat1, long1);
+   
+ var image1 =getCircle(tam_f*escala/7,"yelou")
+
+         marker = new google.maps.Marker({
+         map: map,
+         title: etiquetainfiwindows,
+          position: latlngset,
+          icon: image1,
+          optimized: false,
+         draggable: false,
+          alpha: 0.7,
+         flat: true, 
+          animation:google.maps.Animation.DROP
+         // animation:google.maps.Animation.BOUNCE,
+                     
+        }); //alpha=opacidad , flat=permite cambiar la orientacion del marcador
+       
+       var contentString = html_info_market_1(etiquetainfiwindows, escala, zom);
+
+       var content = html_info_market_1(etiquetainfiwindows, escala, zom)
+
+       var infowindow = new google.maps.InfoWindow()
+
+        google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+          return function () {
+            infowindow.setContent(content);
+            infowindow.open(map, marker);   };   })(marker, content, infowindow)); 
+ addMarkerWithTimeout(marker,10)
+      }//cierre for
+ //showMarkers()
+    }
+    
+        
+      function getCircle(magnitude, color) {
+        return {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: color,
+          fillOpacity: .2,
+          scale: Math.pow(2, magnitude) / 2,
+          strokeColor: 'green',
+          strokeWeight: .5
+        };
+      }
+     function drop() {
+        clearMarkers();
+        for (var i = 0; i < neighborhoods.length; i++) {
+          // Se agrega un marker con un tiempo diferente
+          addMarkerWithTimeout(neighborhoods[i], i * 1000);
+        }
+      }
+             // Agrega un marker con una animación después de un tiempo (timeout)
+      function addMarkerWithTimeout(marker, timeout) {
+        window.setTimeout(function() {
+          markers.push(marker);
+        }, timeout);
+      }
+       
+      // Elimina los markers del mapa
+      function clearMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+        markers = [];
+      }
+
+   </script>
+
+  <div class="app-container home">
+    <div class="row content-container">
+
+  
+      <div class="side-menu sidebar-inverse">
+        <nav class="navbar navbar-default" role="navigation">
+           <!-- menu -->
+          <div class="side-menu-container">
+            <div class="navbar-header">
+             <a class="navbar-brand" href="./home.html">
+                <div class="icon"><img src="./imagenes/osde.png" height="30px"></div>
+                <div class="title brand"> Omaps </div>
+              </a>
+              <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                                <i class="fa fa-times icon"></i>
+                            </button>
+            </div>
+            <ul class="nav navbar-nav">
+              <li>
+                <a href="./home.html">
+                  <span class="icon fa fa-home"></span><span class="title">Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a href="./mapa1.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa1</span>
+                </a>
+              </li>
+                <li>
+                <a href="./mapa2.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa2</span>
+                </a>
+              </li>
+              <li>
+                <a href="./mapa3.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa3</span>
+                </a>
+              </li>
+              <li class="panel panel-default dropdown">
+                <a data-toggle="collapse" href="#dropdown-1">
+                  <span class="icon fa fa-road"></span><span class="title">mapa4</span>
+                </a>
+                <!-- Dropdown level 1 -->
+                <div id="dropdown-1" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ul class="nav navbar-nav">
+                      <li><a href="./mapa2.html"><i class="fa fa-fw fa-stack-overflow"></i> submenu1</a></li>
+                      <li><a href="./mapa2.html"><i class="fa fa-fw fa-desktop"></i> submenu2</a></li>
+                      <li><a href="./mapa2.html"><i class="fa fa-fw fa-picture-o"></i>submenu3</a></li>
+                   </ul>
+                  </div>
+                </div>
+              </li>
+             
+            </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+        </nav>
+      </div>
+      <!-- contenido -->
+   
+      <div class="container">
+      <!--  <div id="m1"> <input type="text" id="hi" name="usuario" value=0 style="width:600px;height:15px"> </div>-->
+       <div id="map"  ></div>
+      
+    </div>
+
+</body>
+
+</html>

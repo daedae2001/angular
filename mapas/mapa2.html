@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="base para pagina con menu animado tipo material desing">
+  <meta name="author" content="daedae2001">
+
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="#fb4400">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#fb4400">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#fb4400">
+  <title>OSDE Mapas</title>
+  <script type="text/javascript" src="./js/datos.js"></script>
+  <script type="text/javascript" src="./js/funciones.js"></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiqjucZhXNWIIBWaHRZB9epebZUWrcYkM&libraries=drawing&libraries=visualization&callback=myMap"
+    async defer></script>
+
+
+  <!-- Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+
+  <!-- CSS Libs -->
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/animate.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/dataTables.bootstrap.css">
+
+
+  <!-- CSS App -->
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <link rel="stylesheet" type="text/css" href="./css/flat-blue.css">
+  <link rel="stylesheet" type="text/css" href="./css/home.css">
+  <!-- Javascript Libs -->
+  <script type="text/javascript" src="./js/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="./js/ace.js"></script>
+  <script type="text/javascript" src="./js/mode-html.js"></script>
+  <script type="text/javascript" src="./js/theme-github.js"></script>
+  <script type="text/javascript" src="./js/jquery.easing.min.js"></script>
+
+  <script type="text/javascript" src="./js/angular.min.js"></script>
+  <script type="text/javascript" src="./js/angular-route.min.js"></script>
+
+  <!--App Javascript -->
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="text/javascript" src="./js/services.js"></script>
+  <script type="text/javascript" src="./js/index.js"></script>
+  <script type="text/javascript" src="./js/marketplace-list.js"></script>
+  <script type="text/javascript" src="./js/users.js"></script>
+
+  <style>
+    #map {
+      height: 900px;
+      width: 100%;
+    }
+  </style>
+
+</head>
+
+<body class="flat-blue" onload="crea_menu_dinamico()">
+
+  <script>
+    var map;
+    var markers = [];
+    var zoom;
+    var la_center = -31.416675;
+    var lg_center = -64.184049;
+    var setfilas = [];
+    var zom = 13;
+    var mimapa;
+    var panorama;
+
+
+    function myMap() {
+
+
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+          lat: la_center,
+          lng: lg_center
+        },
+        zoom: zom,
+        styles: stylesArray0
+      });  
+    }
+    /*  mimapa = map;
+      map.addListener('zoom_changed', function () {
+        zom = map.getZoom()
+        carga_set();
+      });
+
+      heatmap = new google.maps.visualization.HeatmapLayer({
+      //  data: getPoints(),
+        map: map
+      });
+      heatmap.set('opacity', heatmap.get('opacity') ? null : 0.5);
+      heatmap.set('radius', heatmap.get('radius') ? null : 40);
+     // heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+      heatmap.setMap(heatmap.getMap() ? null : map);
+*/
+  </script>
+
+  <div class="app-container home">
+    <div class="row content-container">
+
+
+      <div class="side-menu sidebar-inverse">
+        <nav class="navbar navbar-default" role="navigation">
+          <!-- menu -->
+          <div class="side-menu-container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="./home.html">
+                <div class="icon"><img src="./imagenes/osde.png" height="30px"></div>
+                <div class="title brand"> Omaps </div>
+              </a>
+              <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                                <i class="fa fa-times icon"></i>
+                            </button>
+            </div>
+            <ul class="nav navbar-nav">
+              <li>
+                <a href="./home.html">
+                  <span class="icon fa fa-home"></span><span class="title">Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:ver_todos()">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">Ver todos</span>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:limpiar()">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">Limpiar</span>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:carga_set()">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">Regresar al mapa</span>
+                </a>
+              </li>
+              <li class="panel panel-default dropdown">
+                <a data-toggle="collapse" href="./mapa1.html#dropdown-1">
+                  <span class="icon fa fa-road"></span><span class="title">Especialidades</span>
+                </a>
+                <!-- Dropdown level 1 -->
+                <div id="dropdown-1" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ul class="nav navbar-nav" id="especialidades">
+
+                    </ul>
+                  </div>
+                </div>
+              </li>
+
+              <li>
+                <a href="./mapa2.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa2</span>
+                </a>
+              </li>
+              <li>
+                <a href="./mapa3.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa3</span>
+                </a>
+              </li>
+
+
+            </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+        </nav>
+      </div>
+      <!-- contenido -->
+
+      <div class="container">
+        <!--  <div id="m1"> <input type="text" id="hi" name="usuario" value=0 style="width:600px;height:15px"> </div>-->
+        <div id="map"></div>
+      </div>
+      <script>
+        function crea_menu_dinamico() {
+          var texto = ""
+          var control = document.getElementById('especialidades')
+          for (var i = 0; i < especialidades.length; i++) {  
+            var h1 = document.createElement("i" + i)  ;  
+            var espe = especialidades[i][1];
+            var id_espe = especialidades[i][0];
+            texto = texto + " <li class='mi_item' > <input id='ch" + i + 1 + "'type='checkbox'onclick='carga_set()'/> " +
+              espe + "</li>"; // <a href='javascript:muestra_capa(" + id_espe +
+            //");'><i class='fa fa-fw fa-stack-overflow'></i> " + espe + "</a></li>"; style='color:White; font-size:0.75em;'
+          };
+          h1.innerHTML = texto;
+          control.appendChild(h1) 
+        };
+
+        function carga_set() {
+
+          map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+              lat: la_center,
+              lng: lg_center
+            },
+            zoom: zom,
+            styles: stylesArray0
+          });
+          heatmap = new google.maps.visualization.HeatmapLayer({
+            data: getPoints(),
+            map: map
+          });
+          heatmap.set('opacity', heatmap.get('opacity') ? null : 0.5);
+          heatmap.set('radius', heatmap.get('radius') ? null : 40);
+         // heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+          heatmap.setMap(heatmap.getMap() ? null : map);
+
+          map.addListener('zoom_changed', function () {
+            zom = map.getZoom()
+            carga_set();
+
+
+          });
+        }
+
+        function getPoints() {
+          setfilas.values = 0
+          var espe_c = 0;
+          for (var i = 0; i < especialidades.length; i++) {
+            var cont = "ch" + i + 1
+            espe_c = i + 1;
+           // console.log(cont)
+            if (document.getElementById(cont).checked == true) {
+
+              for (var j = 0; j < especiales.length; j++) {
+                if (espe_c == especiales[j][10]) {
+                  var fila = []
+                  var lat = especiales[j][0];
+                  var long = especiales[j][1];
+                  fila[2] = especiales[j][2];
+                  fila[3] = especiales[j][3];
+                  fila[4] = especiales[j][4];
+                  fila[5] = especiales[j][5]; // /10* ( convierte_escala_zoom( map.getZoom()))
+                  fila[6] = especiales[j][6];
+                  fila[7] = especiales[j][7];
+                  var socios = especiales[j][8];
+                  fila[9] = especiales[j][9];
+                  fila[10] = especiales[j][10];
+                  setfilas.push({
+                    location: new google.maps.LatLng(lat, long),
+                    weight: socios
+                  });
+                };
+              };
+            };
+          }
+          console.log(setfilas)
+          return setfilas
+
+        }
+
+        function ver_todos() {
+
+          var espe_c = 0;
+          for (var i = 0; i < especialidades.length; i++) {
+            var cont = "ch" + i + 1
+            espe_c = i + 1;
+            document.getElementById(cont).checked = true;
+          }
+          carga_set()
+        }
+
+        function limpiar() {
+
+          var espe_c = 0;
+          for (var i = 0; i < especialidades.length; i++) {
+            var cont = "ch" + i + 1
+            espe_c = i + 1;
+            document.getElementById(cont).checked = false;
+          }
+          carga_set()
+        }
+      </script>
+</body>
+
+</html>

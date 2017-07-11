@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="base para pagina con menu animado tipo material desing">
+  <meta name="author" content="daedae2001">
+
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="#fb4400">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#fb4400">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#fb4400">
+  <title>OSDE Mapas</title>
+  <script type="text/javascript" src="./js/datos.js"></script>
+  <script type="text/javascript" src="./js/funciones.js"></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiqjucZhXNWIIBWaHRZB9epebZUWrcYkM&libraries=drawing&callback=myMap"
+    async defer></script>
+
+
+  <!-- Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+
+  <!-- CSS Libs -->
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/animate.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/dataTables.bootstrap.css">
+
+
+  <!-- CSS App -->
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <link rel="stylesheet" type="text/css" href="./css/flat-blue.css">
+  <link rel="stylesheet" type="text/css" href="./css/home.css">
+  <!-- Javascript Libs -->
+  <script type="text/javascript" src="./js/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="./js/ace.js"></script>
+  <script type="text/javascript" src="./js/mode-html.js"></script>
+  <script type="text/javascript" src="./js/theme-github.js"></script>
+  <script type="text/javascript" src="./js/jquery.easing.min.js"></script>
+
+  <script type="text/javascript" src="./js/angular.min.js"></script>
+  <script type="text/javascript" src="./js/angular-route.min.js"></script>
+
+  <!--App Javascript -->
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="text/javascript" src="./js/services.js"></script>
+  <script type="text/javascript" src="./js/index.js"></script>
+  <script type="text/javascript" src="./js/marketplace-list.js"></script>
+  <script type="text/javascript" src="./js/users.js"></script>
+
+  <style>
+    #map {
+      height: 900px;
+      width: 100%;
+    }
+  </style>
+
+</head>
+
+<body class="flat-blue" onload="crea_menu_dinamico()">
+
+  <script>
+    var map;
+    var markers = [];
+    var zoom;
+    var la_center = -31.416675;
+    var lg_center = -64.184049;
+    var setfilas = [];
+    var zom = 13;
+    var mimapa;
+    var panorama;
+    var set_dibujo = true;
+    var drawingManager;
+
+    function myMap() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+          lat: la_center,
+          lng: lg_center
+        },
+        zoom: zom,
+        styles: stylesArray0
+      });
+      map.addListener('zoom_changed', function () {
+        zom = map.getZoom()
+        carga_set();
+      });
+
+      setMarkers(map);
+            map.addListener('zoom_changed', function () {
+        zom = map.getZoom()
+      });
+    }
+    function getCircle(magnitude, color) {
+      return {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: color,
+        fillOpacity: .3,
+        scale: Math.pow(2, magnitude) / 2,
+        strokeColor: 'black',
+        strokeWeight: .6
+      };
+    };
+
+    function street(lat, long) {
+      var coor = {
+        lat: lat,
+        lng: long
+      };
+      var sv = new google.maps.StreetViewService();
+      panorama = new google.maps.StreetViewPanorama(document.getElementById('map'));
+      sv.getPanorama({
+        location: coor,
+        radius: 50
+      }, processSVData);
+    };
+
+    function html_info(especialidad, prestador, razon, direccion, tam_1, tam_2, lat, long) {
+      return '<a href="javascript:street(' + lat + ',' + long + ')">Streetview</a> <h5> Prestador: ' + ' ' + razon +
+        ' </h5> ' + ' <h6> Especialidad: ' + especialidad + ' </h6>  ' + ' <h6> Direccición: ' + direccion + ' </h6>  ' +
+        ' <h6> Frecuencia: ' + tam_1 + ' </h6> ' + ' <h6> Socios: ' + tam_2 + ' </h6> '
+    }
+
+    function setMarkers(map) {
+      clearMarkers();
+      markers = [];
+      for (var i = 0; i < setfilas.length; i++) {
+        var fila = setfilas[i]
+        var lat1 = fila[0]
+        var long1 = fila[1]
+        var prestador = fila[2]
+        var razon = fila[3]
+        var especialidad = fila[4]
+        var direccion = fila[5]
+        var color = fila[6]
+        var tam_1 = fila[7] // /10* ( convierte_escala_zoom( map.getZoom()))
+        var tam_2 = fila[9]
+        var tam_3 = fila[8] * 3
+
+        var escala = (convierte_escala_zoom(zom))
+
+        latlngset = new google.maps.LatLng(lat1, long1);
+
+        var image1 = {
+          url: './imagenes/bar' + color + '.png', // image is 512 x 512
+          scaledSize: new google.maps.Size(32 * escala, tam_3 * escala),
+        };
+
+        var titulo = _titulo(especialidad, prestador, razon);
+        marker = new google.maps.Marker({
+          map: map,
+          title: titulo,
+          position: latlngset,
+          icon: image1,
+          optimized: false,
+          draggable: false,
+          alpha: 0.7,
+          flat: true,
+          animation: google.maps.Animation.DROP
+          // animation:google.maps.Animation.BOUNCE,
+
+        }); //alpha=opacidad , flat=permite cambiar la orientacion del marcador
+
+
+        var content = html_info(especialidad, prestador, razon, direccion, tam_1, tam_2, lat1, long1)
+
+        var infowindow = new google.maps.InfoWindow()
+
+        google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+          return function () {
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+          };
+        })(marker, content, infowindow));
+        addMarkerWithTimeout(marker, 10)
+      } //cierre for
+
+    };
+
+    function drop() {
+      clearMarkers();
+      for (var i = 0; i < neighborhoods.length; i++) { // Se agrega un marker con un tiempo diferente
+        addMarkerWithTimeout(neighborhoods[i], i * 1000);
+      }
+    }; 
+
+    // Agrega un marker con una animacis de un tiempo (timeout)
+    function addMarkerWithTimeout(marker, timeout) {
+      // window.setTimeout(function () {
+      markers.push(marker);
+      //  }, timeout);
+    };
+
+    // Elimina los markers del mapa
+    function clearMarkers() {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
+      markers = [];
+    };
+   
+    function processSVData(data, status) {
+      if (status === google.maps.StreetViewStatus.OK) {
+        // var marker = new google.maps.Marker({
+        //     position: data.location.latLng,
+        //      map: map,
+        //       title: data.location.description
+        //  });
+
+        panorama.setPano(data.location.pano);
+        panorama.setPov({
+          heading: 270,
+          pitch: 0
+        });
+        panorama.setVisible(true);
+
+        marker.addListener('click', function () {
+          var markerPanoID = data.location.pano;
+          // Set the Pano to use the passed panoID.
+          panorama.setPano(markerPanoID);
+          panorama.setPov({
+            heading: 180,
+            pitch: 0
+          });
+          panorama.setVisible(true);
+        });
+      } else {
+        alert('No hay street view en esa locacion.');
+        carga_set()
+      }
+    };
+  </script>
+
+  <div class="app-container home">
+    <div class="row content-container">
+
+
+      <div class="side-menu sidebar-inverse">
+        <nav class="navbar navbar-default" role="navigation">
+          <!-- menu -->
+          <div class="side-menu-container">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="./home.html">
+                <div class="icon"><img src="./imagenes/osde.png" height="30px"></div>
+                <div class="title brand"> Omaps </div>
+              </a>
+              <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                                <i class="fa fa-times icon"></i>
+                            </button>
+            </div>
+            <ul class="nav navbar-nav">
+              <li>
+                <a href="./home.html">
+                  <span class="icon fa fa-home"></span><span class="title">Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:ver_todos()">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">Ver todos</span>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:limpiar()">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">Limpiar</span>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:carga_set()">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">Regresar al mapa</span>
+                </a>
+              </li>
+              <li  >
+              <p class="mi_item_check">   <input id='chdibujo'  type='checkbox' onclick='barra_dibujo()'/> Dibujo</p>
+              </p> </li>
+              <li class="panel panel-default dropdown">
+                <a data-toggle="collapse" href="./mapa1.html#dropdown-1">
+                  <span class="icon fa fa-road"></span><span class="title">Especialidades</span>
+                </a>
+                <!-- Dropdown level 1 -->
+                <div id="dropdown-1" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ul class="nav navbar-nav" id="especialidades">
+
+                    </ul>
+                  </div>
+                </div>
+              </li>
+
+              <li>
+                <a href="./mapa2.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa2</span>
+                </a>
+              </li>
+              <li>
+                <a href="./mapa3.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa3</span>
+                </a>
+              </li>
+
+
+            </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+        </nav>
+      </div>
+      <!-- contenido -->
+
+      <div class="container">
+        <!--  <div id="m1"> <input type="text" id="hi" name="usuario" value=0 style="width:600px;height:15px"> </div>-->
+        <div id="map"></div>
+      </div>
+      <script>
+        function crea_menu_dinamico() {
+          var texto = ""
+          var control = document.getElementById('especialidades')
+          for (var i = 0; i < especialidades.length; i++) {
+            var h1 = document.createElement("i" + i);
+            var espe = especialidades[i][1];
+            var id_espe = especialidades[i][0];
+            texto = texto + " <li class='mi_item' > <input id='ch" + i + 1 + "'type='checkbox'onclick='carga_set()'/> " +espe + "</li>";   
+              };
+          h1.innerHTML = texto;
+          control.appendChild(h1);
+        };
+
+        function carga_set() {
+
+          map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+              lat: la_center,
+              lng: lg_center
+            },
+            zoom: zom,
+            styles: stylesArray0
+          });
+          setMarkers(map);
+
+
+          if (chdibujo.checked==true) {
+            drawingManager = new google.maps.drawing.DrawingManager({
+              drawingMode: google.maps.drawing.OverlayType.MARKER,
+              drawingControl: true,
+              drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: ['marker', 'circle', 'polygon', 'polyline', 'rectangle']
+              },
+              markerOptions: {
+                icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+              },
+              circleOptions: {
+                fillColor: '#ffff00',
+                fillOpacity: 0.5,
+                strokeWeight: 2,
+                clickable: false,
+                editable: true,
+                zIndex: 1
+              }
+            });
+            drawingManager.setMap(map);
+                } else {
+          try {
+    drawingManager.setMap(null);
+}
+catch(err) {
+   // document.getElementById("demo").innerHTML = err.message;
+}
+       
+        }
+          map.addListener('zoom_changed', function () {
+            zom = map.getZoom()
+          });
+          setfilas.length = 0
+          var espe_c = 0;
+          for (var i = 0; i < especialidades.length; i++) {
+            var cont = "ch" + i + 1
+            espe_c = i + 1;
+            if (document.getElementById(cont).checked == true) {
+
+              for (var j = 0; j < especiales.length; j++) {
+                if (espe_c == especiales[j][10]) {
+                  var fila = []
+                  fila[0] = especiales[j][0];
+                  fila[1] = especiales[j][1];
+                  fila[2] = especiales[j][2];
+                  fila[3] = especiales[j][3];
+                  fila[4] = especiales[j][4];
+                  fila[5] = especiales[j][5]; // /10* ( convierte_escala_zoom( map.getZoom()))
+                  fila[6] = especiales[j][6];
+                  fila[7] = especiales[j][7];
+                  fila[8] = especiales[j][8];
+                  fila[9] = especiales[j][9];
+                  fila[10] = especiales[j][10];
+                  setfilas.push(fila)
+                };
+              };
+            };
+          }
+          setMarkers(map)
+        }
+
+        function ver_todos() {
+          var espe_c = 0;
+          for (var i = 0; i < especialidades.length; i++) {
+            var cont = "ch" + i + 1
+            espe_c = i + 1;
+            document.getElementById(cont).checked = true;
+          }
+          carga_set()
+        }
+
+        function limpiar() {
+
+          var espe_c = 0;
+          for (var i = 0; i < especialidades.length; i++) {
+            var cont = "ch" + i + 1
+            espe_c = i + 1;
+            document.getElementById(cont).checked = false;
+          }
+          carga_set()
+        }
+
+        function barra_dibujo() {
+          carga_set()
+        }
+      </script>
+</body>
+
+</html>

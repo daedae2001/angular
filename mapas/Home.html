@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="base para pagina con menu animado tipo material desing">
+  <meta name="author" content="daedae2001">
+ 
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="#fb4400">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#fb4400">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#fb4400">
+  <title>OSDE Mapas</title>
+ <script type="text/javascript" src="./js/datos.js"></script>
+  <script type="text/javascript" src="./js/funciones.js"></script>
+
+ </script>
+
+   <!-- Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+
+  <!-- CSS Libs -->
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/animate.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/dataTables.bootstrap.css">
+
+
+  <!-- CSS App -->
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <link rel="stylesheet" type="text/css" href="./css/flat-blue.css">
+  <link rel="stylesheet" type="text/css" href="./css/home.css">
+  <!-- Javascript Libs -->
+  <script type="text/javascript" src="./js/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="./js/ace.js"></script>
+  <script type="text/javascript" src="./js/mode-html.js"></script>
+  <script type="text/javascript" src="./js/theme-github.js"></script>
+  <script type="text/javascript" src="./js/jquery.easing.min.js"></script>
+
+  <script type="text/javascript" src="./js/angular.min.js"></script>
+  <script type="text/javascript" src="./js/angular-route.min.js"></script>
+
+  <!--App Javascript -->
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="text/javascript" src="./js/services.js"></script>
+  <script type="text/javascript" src="./js/index.js"></script>
+  <script type="text/javascript" src="./js/marketplace-list.js"></script>
+  <script type="text/javascript" src="./js/users.js"></script>
+
+       
+
+
+  <style>
+       #map {
+        height: 900px;
+        width: 100%;
+       }
+    </style>
+  
+</head>
+
+<body class="flat-blue"  >
+ 
+
+  <div class="app-container home">
+    <div class="row content-container">
+
+      <div class="side-menu sidebar-inverse">
+        <nav class="navbar navbar-default" role="navigation">
+            <!-- menu -->
+          <div class="side-menu-container">
+            <div class="navbar-header">
+             <a class="navbar-brand" href="./home.html">
+                <div class="icon"><img src="./imagenes/osde.png" height="30px"></div>
+                <div class="title brand"> Omaps </div>
+              </a>
+              <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                                <i class="fa fa-times icon"></i>
+                            </button>
+            </div>
+            <ul class="nav navbar-nav">
+              <li>
+                <a href="./home.html">
+                  <span class="icon fa fa-home"></span><span class="title">Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a href="./mapa1.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa1</span>
+                </a>
+              </li>
+                <li>
+                <a href="./mapa2.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa2</span>
+                </a>
+              </li>
+              <li>
+                <a href="./mapa3.html">
+                  <span class="icon fa fa-file-text-o"></span><span class="title">mapa3</span>
+                </a>
+              </li>
+              <li class="panel panel-default dropdown">
+                <a data-toggle="collapse" href="#dropdown-1">
+                  <span class="icon fa fa-road"></span><span class="title">mapa4</span>
+                </a>
+                <!-- Dropdown level 1 -->
+                <div id="dropdown-1" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ul class="nav navbar-nav">
+                      <li><a href="./mapa2.html"><i class="fa fa-fw fa-stack-overflow"></i>submenu1</a></li>
+                      <li><a href="./mapa2.html"><i class="fa fa-fw fa-desktop"></i>submenu2</a></li>
+                      <li><a href="./mapa2.html"><i class="fa fa-fw fa-picture-o"></i>submenu3</a></li>
+                   </ul>
+                  </div>
+                </div>
+              </li>
+             
+            </ul>
+          </div>
+          <!-- /.navbar-collapse -->
+        </nav>
+      </div>
+     
+          <div class="album text-muted">
+      <div class="container">
+
+        <div class="row">
+          <div class="card">
+           <a href="mapa1.html"  target="_blank"><img src="./imagenes/mapa1.PNG" width="150" height="150"  on-touch=""         > </a>>
+            <p class="card-text">Mapa que muestra barra</p>
+          </div>
+          <div class="card">
+           <a href="mapa2.html"  target="_blank"><img src="./imagenes/mapa2.PNG" width="150" height="150"  on-touch=""         > </a>>
+            <p class="card-text">Mapa que muestra globo</p>
+          </div>
+         <div class="card">
+           <a href="mapa3.html"  target="_blank"><img src="./imagenes/mapa3.PNG" width="150" height="150"  on-touch=""         > </a>>
+            <p class="card-text">Mapa que muestra barra</p>
+          </div>
+          <div class="card">
+           <a href="mapa2.html"  target="_blank"><img src="./imagenes/mapa4.PNG" width="150" height="150"  on-touch=""         > </a>>
+            <p class="card-text">Mapa que muestra globo</p>
+          </div>
+       
+        </div>
+
+      </div>
+    </div>
+      
+
+</body>
+
+</html>
